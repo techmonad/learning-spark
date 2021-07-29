@@ -1,6 +1,8 @@
 package com.techmonad.learn
 
+import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
+import org.apache.spark.util.LongAccumulator
 
 object RDDOps extends SparkSessionProvider {
 
@@ -19,7 +21,9 @@ object RDDOps extends SparkSessionProvider {
             .split("\\s+")
             .filter { word => word.length > 0 }
         }
+      //.countByValue() //OR
         .map { word => (word, 1) }
+      //.countByKey() // OR
         .reduceByKey { case (count1, count2) => count1 + count2 }
 
     wordCounts.collect.foreach(println)
@@ -66,6 +70,20 @@ object RDDOps extends SparkSessionProvider {
 
     val userDetailsRight: RDD[(Int, (Option[User], Detail))] = userWithId.rightOuterJoin(detailWithId)
     userDetailsRight.collect.foreach(println)
+
+    //Accumulator
+    val acc: LongAccumulator = sc.longAccumulator("acc")
+    // change the value
+    acc.add(2)
+
+    println(acc.value)
+
+    // broadcast the id = 1212 on all the machine in the cluster
+    val bcId: Broadcast[Int] = sc.broadcast(1212)
+
+    // get Id on any worker nodes
+    val id: Int = bcId.value
+    println(id)
 
     spark.stop()
   }

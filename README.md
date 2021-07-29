@@ -15,3 +15,11 @@
 ```shell script
  sbt "runMain com.techmonad.learn.RDDOps"
 ```
+#### [Run Structured Streaming operations](https://github.com/techmonad/learning-spark/blob/master/src/main/scala/com/techmonad/learn/StructuredStreamingOps.scala)
+```shell script
+// start natcat server and paste some texts
+ nc -lk 9999
+
+ //Now start streaming app
+ sbt "runMain com.techmonad.learn.StructuredStreamingOps"
+```
