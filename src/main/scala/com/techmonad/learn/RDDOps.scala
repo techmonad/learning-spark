@@ -2,6 +2,7 @@ package com.techmonad.learn
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 import org.apache.spark.util.LongAccumulator
 
 object RDDOps extends SparkSessionProvider {
@@ -12,6 +13,9 @@ object RDDOps extends SparkSessionProvider {
     val rdd: RDD[String] =
       sc
         .textFile("data/words.txt")
+
+    // persist RDD in memory
+     rdd.persist(StorageLevel.MEMORY_ONLY)
 
     println("############ Word count ##############################")
     val wordCounts: RDD[(String, Int)] =

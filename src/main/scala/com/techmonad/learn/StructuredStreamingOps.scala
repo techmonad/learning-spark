@@ -34,6 +34,7 @@ object StructuredStreamingOps extends SparkSessionProvider {
 
     query.awaitTermination()
 
+
     /*    words
           .writeStream
           .foreachBatch { (df, batchNo) =>

@@ -19,7 +19,7 @@ object DataFrameOps extends SparkSessionProvider {
         .select("word")
         .groupBy("word")
         .agg(count("word").as("count"))
-    wordCounts.show()
+    // wordCounts.show()
 
     // Joins
     val users =
@@ -28,7 +28,7 @@ object DataFrameOps extends SparkSessionProvider {
         .option("delimiter", ",")
         .option("header", "true")
         .csv("data/users.csv")
-    users.show()
+    //users.show()
 
     val userDetails =
       spark
@@ -37,26 +37,31 @@ object DataFrameOps extends SparkSessionProvider {
         .option("delimiter", ",")
         .csv("data/user-details.csv")
 
-    userDetails.show()
+    //userDetails.show()
 
     println("#############Inner Join###################")
     val innerJoin: DataFrame = users.join(userDetails, Seq("id"), "inner")
-    innerJoin.show()
+    //innerJoin.show()
 
     println("#############Left Join###################")
     val leftJoin: DataFrame = users.join(userDetails, Seq("id"), "left")
-    leftJoin.show()
+    //leftJoin.show()
 
     println("#############Right Join###################")
     val rightJoin: DataFrame = users.join(userDetails, Seq("id"), "right")
-    rightJoin.show()
+    //rightJoin.show()
 
 
     println("#############full Join###################")
     val fullJoin: DataFrame = users.join(userDetails, Seq("id"), "full")
     fullJoin.show()
 
+
     spark.stop()
   }
 
 }
+
+
+
+
