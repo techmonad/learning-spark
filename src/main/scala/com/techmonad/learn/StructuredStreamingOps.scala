@@ -9,6 +9,9 @@ object StructuredStreamingOps extends SparkSessionProvider {
   def main(args: Array[String]): Unit = {
     import spark.implicits._
 
+    /**
+     * Connect to streaming data source
+     */
     val streamDF: DataFrame =
       spark
         .readStream
@@ -17,6 +20,9 @@ object StructuredStreamingOps extends SparkSessionProvider {
         .option("host", "localhost")
         .load()
 
+    /**
+     * Apply transformation on the stream DataFrame
+     */
     val words: DataFrame =
       streamDF
         .withColumn("words", split($"value", "\\s+"))
@@ -25,6 +31,9 @@ object StructuredStreamingOps extends SparkSessionProvider {
         .groupBy("word")
         .count()
 
+    /**
+     * write into down stream data source (Console is down steam data source for this example)
+     */
     val query: StreamingQuery =
       words
         .writeStream
@@ -32,6 +41,9 @@ object StructuredStreamingOps extends SparkSessionProvider {
         .format("console")
         .start()
 
+    /**
+     * wait for stream termination
+     */
     query.awaitTermination()
 
 

@@ -1,5 +1,6 @@
-package com.techmonad.learn
+package com.techmonad.learn.rdd
 
+import com.techmonad.learn.{Detail, SparkSessionProvider, User}
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
