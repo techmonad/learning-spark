@@ -8,6 +8,7 @@ import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructT
 
 object DataFrameOpsLevel2 extends App with SparkSessionProvider {
 
+  import spark.implicits._
   // top # elements by department
   //CSV => empid,ename,salary,deptId,mgtId
 
@@ -42,19 +43,31 @@ object DataFrameOpsLevel2 extends App with SparkSessionProvider {
     .withColumn("rank", dense_rank() over partitionByDeptOrderBySal)
     .filter("rank <= 5")
     .select("deptId", "salary")
-    .show(20)
+    //.show(20)
 
+// Salary in more readable format like upper(salary greater than 70), lower(salary less than 50) and medium(salary b/w 50 & 70) class
 
-  /** Expensive apprach
-   *spark.udf.register("sort_list",(list:List[Int]) =>   list.sorted.take(3))
-   * *
-   * empDF
-   * .groupBy("deptId")
-   * .agg(collect_list($"salary").as("list"))
-   * .selectExpr("deptId", "sort_list(list)")
-   * .show()
-   *
-   */
+  empDF
+    .withColumn("Class",
+      when($"salary" <= 50 , "Lower Class" )
+        .when($"salary" >50 && $"salary" <= 70, "Medium Class")
+        .otherwise("Upper Class")
+    )
+   // .show()
+  // OR by SQL
+
+  empDF.createOrReplaceTempView("emp")
+
+  spark.sql(
+    """select ename,salary,
+      | CASE
+      |    when salary <= 50  then "Lower Class"
+      |    when salary > 50 AND salary <= 70 then "Medium Class"
+      |    else "Upper Class"
+      |    END as Class
+      |    from emp;
+      | """.stripMargin).show()
+
 
 
 }
