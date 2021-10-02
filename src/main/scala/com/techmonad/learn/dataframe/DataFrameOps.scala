@@ -1,7 +1,8 @@
-package com.techmonad.learn
+package com.techmonad.learn.dataframe
 
+import com.techmonad.learn.SparkSessionProvider
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{col, count, explode, split}
 
 object DataFrameOps extends SparkSessionProvider {
 
@@ -61,7 +62,3 @@ object DataFrameOps extends SparkSessionProvider {
   }
 
 }
-
-
-
-

@@ -2,7 +2,7 @@
 
 ##### [Run dataset operations](https://github.com/techmonad/learning-spark/blob/master/src/main/scala/com/techmonad/learn/DataSetOps.scala#L7-L93) 
 ```shell script
- sbt "runMain com.techmonad.learn.DataSetOps"
+ sbt "runMain com.techmonad.learn.dataset.DataSetOps"
 ```
 
 ##### [Run dataframe operations](https://github.com/techmonad/learning-spark/blob/master/src/main/scala/com/techmonad/learn/DataFrameOps.scala#L6-L59) 

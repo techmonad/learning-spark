@@ -1,5 +1,6 @@
-package com.techmonad.learn
+package com.techmonad.learn.dataset
 
+import com.techmonad.learn.SparkSessionProvider
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{Dataset, Encoders}
 
@@ -7,7 +8,6 @@ import org.apache.spark.sql.{Dataset, Encoders}
 object DataSetOps extends SparkSessionProvider {
 
   def main(args: Array[String]): Unit = {
-
     import spark.implicits._
 
     // read text file as a dataset

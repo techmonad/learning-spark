@@ -1,10 +1,9 @@
-package com.techmonad.learn
+package com.techmonad.learn.dataframe
 
-
+import com.techmonad.learn.SparkSessionProvider
 import org.apache.spark.sql.expressions.{Window, WindowSpec}
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{asc, dense_rank, desc, when}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
-
 
 object DataFrameOpsLevel2 extends App with SparkSessionProvider {
 
@@ -35,25 +34,24 @@ object DataFrameOpsLevel2 extends App with SparkSessionProvider {
   val partitionByDeptOrderBySal: WindowSpec =
     Window
       .partitionBy("deptId")
-      .orderBy(desc("salary"))
-
+      .orderBy(asc("deptId"), desc("salary"))
 
   // TOP 5 salary in each department
   empDF
     .withColumn("rank", dense_rank() over partitionByDeptOrderBySal)
-    .filter("rank <= 5")
-    .select("deptId", "salary")
-    //.show(20)
+    .filter("rank <= 3")
+    .select("deptId", "salary", "rank")
+  //  .show()
 
-// Salary in more readable format like upper(salary greater than 70), lower(salary less than 50) and medium(salary b/w 50 & 70) class
+  // Salary in more readable format like upper(salary greater than 70), lower(salary less than 50) and medium(salary b/w 50 & 70) class
 
   empDF
     .withColumn("Class",
-      when($"salary" <= 50 , "Lower Class" )
-        .when($"salary" >50 && $"salary" <= 70, "Medium Class")
+      when($"salary" <= 50, "Lower Class")
+        .when($"salary" > 50 && $"salary" <= 70, "Medium Class")
         .otherwise("Upper Class")
     )
-   // .show()
+  // .show()
   // OR by SQL
 
   empDF.createOrReplaceTempView("emp")
@@ -66,8 +64,8 @@ object DataFrameOpsLevel2 extends App with SparkSessionProvider {
       |    else "Upper Class"
       |    END as Class
       |    from emp;
-      | """.stripMargin).show()
-
+      | """.stripMargin)
+  //.show()
 
 
 }
