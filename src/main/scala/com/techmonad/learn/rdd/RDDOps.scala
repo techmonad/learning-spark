@@ -17,7 +17,8 @@ object RDDOps extends SparkSessionProvider {
         .textFile("data/words.txt")
 
     // persist RDD in memory
-     rdd.persist(StorageLevel.MEMORY_ONLY)
+     //rdd.persist(StorageLevel.MEMORY_ONLY)
+    rdd.cache()
 
     println("############ Word count ##############################")
     val wordCounts: RDD[(String, Int)] =
@@ -25,12 +26,12 @@ object RDDOps extends SparkSessionProvider {
         .flatMap { line =>
           line
             .split("\\s+")
-            .filter { word => word.length > 0 }
+            .filter { word => word.nonEmpty }
         }
       //.countByValue() //OR
         .map { word => (word, 1) }
       //.countByKey() // OR
-        .reduceByKey { case (count1, count2) => count1 + count2 }
+        .reduceByKey {  (count1, count2) => count1 + count2 }
 
     wordCounts.collect.foreach(println)
 

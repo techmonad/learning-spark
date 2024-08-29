@@ -5,21 +5,21 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 trait SparkSessionProvider {
 
-  val spark =
+  val spark: SparkSession =
     SparkSession
       .builder()
       .appName("LearningSpark")
       .master("local[*]")
       .getOrCreate()
 
-  val sc = spark.sparkContext
+  val sc: SparkContext = spark.sparkContext
 
 
 }
 
 trait SparkContextProvider {
 
-  implicit val sc = new SparkContext(
+  implicit val sc: SparkContext = new SparkContext(
     new SparkConf()
       .setAppName("LearningSpark")
       .setMaster("local[*]")
